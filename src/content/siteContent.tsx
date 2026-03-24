@@ -168,6 +168,24 @@ const SERVICE_IMAGE_IMPLANTS =
   "https://images.pexels.com/photos/6502305/pexels-photo-6502305.jpeg?auto=compress&cs=tinysrgb&w=900&h=675&fit=crop";
 const SERVICE_IMAGE_MULTISPECIALITY =
   "https://images.pexels.com/photos/5452254/pexels-photo-5452254.jpeg?auto=compress&cs=tinysrgb&w=900&h=675&fit=crop";
+const GALLERY_IMAGE_WAITING_AREA =
+  "https://images.pexels.com/photos/8459996/pexels-photo-8459996.jpeg?auto=compress&cs=tinysrgb&w=900&h=1200&fit=crop";
+const GALLERY_IMAGE_SONOGRAPHY_ROOM =
+  "https://images.pexels.com/photos/7108402/pexels-photo-7108402.jpeg?auto=compress&cs=tinysrgb&w=900&h=1200&fit=crop";
+const GALLERY_IMAGE_DENTAL_ROOM =
+  "https://images.pexels.com/photos/4269276/pexels-photo-4269276.jpeg?auto=compress&cs=tinysrgb&w=900&h=1200&fit=crop";
+const GALLERY_IMAGE_CONSULTATION_ROOM =
+  "https://images.pexels.com/photos/12454146/pexels-photo-12454146.jpeg?auto=compress&cs=tinysrgb&w=900&h=1200&fit=crop";
+const GALLERY_IMAGE_SUPPORT_DESK =
+  "https://images.pexels.com/photos/6234630/pexels-photo-6234630.jpeg?auto=compress&cs=tinysrgb&w=900&h=1200&fit=crop";
+const GALLERY_IMAGE_AWARENESS_CAMP =
+  "https://images.pexels.com/photos/23625648/pexels-photo-23625648.jpeg?auto=compress&cs=tinysrgb&w=900&h=1200&fit=crop";
+const GALLERY_IMAGE_WORKSHOP =
+  "https://images.pexels.com/photos/2774556/pexels-photo-2774556.jpeg?auto=compress&cs=tinysrgb&w=900&h=1200&fit=crop";
+const GALLERY_IMAGE_DENTAL_EVENT =
+  "https://images.pexels.com/photos/5355863/pexels-photo-5355863.jpeg?auto=compress&cs=tinysrgb&w=900&h=1200&fit=crop";
+const GALLERY_IMAGE_EDUCATION_SESSION =
+  "https://images.pexels.com/photos/6234614/pexels-photo-6234614.jpeg?auto=compress&cs=tinysrgb&w=900&h=1200&fit=crop";
 
 const KNOWN_ASSET_URLS: Array<[pattern: string, resolved: string]> = [
   ["clinic-hero", clinicHero],
@@ -242,15 +260,15 @@ export const defaultSiteContent: SiteContent = {
     description: "A visual section where your client can manage facility and event photos for the center.",
     filters: ["Facility", "Event"],
     items: [
-      { id: "gallery-1", title: "Reception & Waiting Area", category: "Facility", description: "Warm, welcoming space designed for patient comfort and easy check-in.", image: clinicHero },
-      { id: "gallery-2", title: "Advanced Sonography Room", category: "Facility", description: "Dedicated imaging setup for detailed scans and careful diagnostic review.", image: sonographyImg },
-      { id: "gallery-3", title: "Dental Care Setup", category: "Facility", description: "Clean treatment area prepared for precision-led dental care.", image: dentalImg },
-      { id: "gallery-4", title: "Consultation Corner", category: "Facility", description: "A well-organized consultation space for guided patient discussions and checkups.", image: clinicHero },
-      { id: "gallery-5", title: "Diagnostic Support Desk", category: "Facility", description: "An efficient front-desk and support area for patient coordination and smooth visits.", image: sonographyImg },
-      { id: "gallery-6", title: "Health Awareness Camp", category: "Event", description: "Community-focused care initiatives and patient engagement moments from the center.", image: clinicHero },
-      { id: "gallery-7", title: "Diagnostic Workshop Day", category: "Event", description: "A professional look at educational and outreach activities hosted by the clinic.", image: sonographyImg },
-      { id: "gallery-8", title: "Dental Consultation Camp", category: "Event", description: "Showcase moments for special dental drives, camps, and patient support events.", image: dentalImg },
-      { id: "gallery-9", title: "Patient Education Session", category: "Event", description: "Informative sessions designed to build awareness around diagnostics and oral health.", image: sonographyImg },
+      { id: "gallery-1", title: "Reception & Waiting Area", category: "Facility", description: "Warm, welcoming space designed for patient comfort and easy check-in.", image: GALLERY_IMAGE_WAITING_AREA },
+      { id: "gallery-2", title: "Advanced Sonography Room", category: "Facility", description: "Dedicated imaging setup for detailed scans and careful diagnostic review.", image: GALLERY_IMAGE_SONOGRAPHY_ROOM },
+      { id: "gallery-3", title: "Dental Care Setup", category: "Facility", description: "Clean treatment area prepared for precision-led dental care.", image: GALLERY_IMAGE_DENTAL_ROOM },
+      { id: "gallery-4", title: "Consultation Corner", category: "Facility", description: "A well-organized consultation space for guided patient discussions and checkups.", image: GALLERY_IMAGE_CONSULTATION_ROOM },
+      { id: "gallery-5", title: "Diagnostic Support Desk", category: "Facility", description: "An efficient front-desk and support area for patient coordination and smooth visits.", image: GALLERY_IMAGE_SUPPORT_DESK },
+      { id: "gallery-6", title: "Health Awareness Camp", category: "Event", description: "Community-focused care initiatives and patient engagement moments from the center.", image: GALLERY_IMAGE_AWARENESS_CAMP },
+      { id: "gallery-7", title: "Diagnostic Workshop Day", category: "Event", description: "A professional look at educational and outreach activities hosted by the clinic.", image: GALLERY_IMAGE_WORKSHOP },
+      { id: "gallery-8", title: "Dental Consultation Camp", category: "Event", description: "Showcase moments for special dental drives, camps, and patient support events.", image: GALLERY_IMAGE_DENTAL_EVENT },
+      { id: "gallery-9", title: "Patient Education Session", category: "Event", description: "Informative sessions designed to build awareness around diagnostics and oral health.", image: GALLERY_IMAGE_EDUCATION_SESSION },
       { id: "gallery-10", title: "Center Milestone Celebration", category: "Event", description: "Highlights from important center events, team gatherings, and patient community moments.", image: clinicHero },
       { id: "gallery-11", title: "Special Checkup Drive", category: "Event", description: "Snapshots from special health drives organized to support patients with timely care.", image: dentalImg },
     ],
@@ -512,6 +530,7 @@ function normalizeImageUrl(value: string | undefined, fallback: string) {
 
   return url;
 }
+
 
 
 
