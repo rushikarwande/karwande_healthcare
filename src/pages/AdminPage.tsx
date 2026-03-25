@@ -651,6 +651,10 @@ const AdminPage = () => {
               <Field label="Contact Title"><Input value={draftContent.contact.title} onChange={(event) => update((draft) => { draft.contact.title = event.target.value; })} /></Field>
             </div>
             <Field label="Contact Description" className="mt-6"><Textarea value={draftContent.contact.description} onChange={(event) => update((draft) => { draft.contact.description = event.target.value; })} /></Field>
+            <div className="grid md:grid-cols-2 gap-6 mt-6">
+              <Field label="Call Now Number (Header Button)"><Input value={draftContent.contact.callNumber} onChange={(event) => update((draft) => { draft.contact.callNumber = event.target.value; })} placeholder="9405 568 568" /></Field>
+              <Field label="Appointment Number (Book + Contact Buttons)"><Input value={draftContent.contact.appointmentNumber} onChange={(event) => update((draft) => { draft.contact.appointmentNumber = event.target.value; })} placeholder="9405 568 568" /></Field>
+            </div>
             <div className="space-y-6 mt-6">
               {draftContent.contact.clinics.map((clinic, clinicIndex) => (
                 <div key={clinic.id} className="rounded-2xl border border-border bg-background p-5 space-y-4">
@@ -922,6 +926,7 @@ function loadImage(src: string) {
 }
 
 export default AdminPage;
+
 
 
 

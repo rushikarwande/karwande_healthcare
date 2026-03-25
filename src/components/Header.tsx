@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Menu, Phone, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useSiteContent } from "@/content/siteContent";
+import { getDialNumber, useSiteContent } from "@/content/siteContent";
 import LogoMark from "@/components/LogoMark";
 
 const Header = () => {
@@ -18,8 +18,7 @@ const Header = () => {
     { label: "Contact", href: "#contact" },
   ];
 
-  const primaryPhone = content.contact.clinics[0]?.phones[0] ?? content.footer.phones[0] ?? "";
-  const dialNumber = primaryPhone.replace(/\s|-/g, "");
+  const dialNumber = getDialNumber(content.contact.callNumber);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-b border-border shadow-sm">
@@ -91,3 +90,5 @@ const Header = () => {
 };
 
 export default Header;
+
+

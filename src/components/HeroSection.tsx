@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
 import { Clock, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useSiteContent } from "@/content/siteContent";
+import { getDialNumber, useSiteContent } from "@/content/siteContent";
 import clinicHero from "@/assets/clinic-hero.jpg";
 import SafeImage from "@/components/SafeImage";
 
 const HeroSection = () => {
   const { content } = useSiteContent();
-  const primaryPhone = content.contact.clinics[0]?.phones[0] ?? content.footer.phones[0] ?? "";
-  const dialNumber = primaryPhone.replace(/\s|-/g, "");
+  const dialNumber = getDialNumber(content.contact.appointmentNumber);
 
   return (
     <section id="home" className="relative min-h-[90vh] flex items-center overflow-hidden pt-20">
@@ -112,3 +111,5 @@ const StatCard = ({ number, label }: { number: string; label: string }) => (
 );
 
 export default HeroSection;
+
+

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Clock, ExternalLink, Mail, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useSiteContent } from "@/content/siteContent";
+import { getDialNumber, useSiteContent } from "@/content/siteContent";
 
 const ContactSection = () => {
   const { content } = useSiteContent();
@@ -50,7 +50,7 @@ const ContactSection = () => {
                     {clinic.phones.map((phone, phoneIndex) => (
                       <a
                         key={phone}
-                        href={`tel:${phone.replace(/\s|-/g, "")}`}
+                        href={`tel:${getDialNumber(phone)}`}
                         className="hover:text-primary transition-colors"
                       >
                         {phone}
@@ -80,7 +80,7 @@ const ContactSection = () => {
                     : "bg-secondary text-secondary-foreground hover:bg-secondary/90"
                 }`}
               >
-                <a href={`tel:${clinic.phones[0]?.replace(/\s|-/g, "") ?? ""}`}>
+                <a href={`tel:${getDialNumber(content.contact.appointmentNumber)}`}>
                   <Phone className="w-4 h-4" />
                   Call for Appointment
                 </a>
@@ -134,3 +134,4 @@ const ContactSection = () => {
 };
 
 export default ContactSection;
+

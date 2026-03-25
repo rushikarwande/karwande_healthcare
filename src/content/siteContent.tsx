@@ -134,6 +134,8 @@ export interface SiteContent {
     eyebrow: string;
     title: string;
     description: string;
+    callNumber: string;
+    appointmentNumber: string;
     clinics: ClinicContact[];
     mapEmbedUrl: string;
     mapLink: string;
@@ -302,6 +304,8 @@ export const defaultSiteContent: SiteContent = {
     eyebrow: "Get In Touch",
     title: "Contact Us",
     description: "Reach out to us for appointments or inquiries. We're here to help with all your healthcare needs.",
+    callNumber: "9405 568 568",
+    appointmentNumber: "9405 568 568",
     clinics: [
       { id: "clinic-1", name: "Dr. Karwande Diagnostic", subtitle: "Advanced Sonography Clinic", doctor: "Dr. Amol Karwande", phones: ["02429-222020", "9405 568 568"], email: "DrkarwandeDiagnostic@gmail.com", hours: "Monday - Sunday, 9 AM - 9 PM", color: "primary" },
       { id: "clinic-2", name: "Dr. R.K.'s Ekdant Dental Care", subtitle: "Multispeciality Dental Clinic", doctor: "Dr. Rutuja Karwande (Kale)", phones: ["8999 48 2897"], email: "rpk224455@gmail.com", hours: "Contact for appointment", color: "secondary" },
@@ -341,6 +345,17 @@ function normalizeContent(value: SiteContent) {
   if (value.contact.mapEmbedUrl === OLD_MAP_EMBED_URL) {
     value.contact.mapEmbedUrl = NEW_MAP_EMBED_URL;
   }
+
+  value.contact.callNumber =
+    value.contact.callNumber?.trim() ||
+    value.contact.clinics?.[0]?.phones?.[0] ||
+    value.footer.phones?.[0] ||
+    defaultSiteContent.contact.callNumber;
+  value.contact.appointmentNumber =
+    value.contact.appointmentNumber?.trim() ||
+    value.contact.clinics?.[0]?.phones?.[0] ||
+    value.footer.phones?.[0] ||
+    defaultSiteContent.contact.appointmentNumber;
 
   value.branding.logoImage = normalizeImageUrl(value.branding.logoImage, "");
   value.hero.backgroundImage = normalizeImageUrl(value.hero.backgroundImage, defaultSiteContent.hero.backgroundImage);
@@ -501,6 +516,10 @@ export function createId(prefix: string) {
   return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
+export function getDialNumber(value: string | undefined) {
+  return (value || "").replace(/[^\d+]/g, "");
+}
+
 function cloneDeep<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
 }
@@ -530,6 +549,7 @@ function normalizeImageUrl(value: string | undefined, fallback: string) {
 
   return url;
 }
+
 
 
 
