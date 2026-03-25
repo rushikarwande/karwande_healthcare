@@ -22,7 +22,7 @@ const ContactSection = () => {
           <p className="text-muted-foreground max-w-2xl mx-auto">{content.contact.description}</p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto mb-12">
           {content.contact.clinics.map((clinic, idx) => (
             <motion.div
               key={clinic.id}
@@ -30,7 +30,7 @@ const ContactSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.15 }}
-              className="bg-card rounded-2xl border border-border p-8 hover:shadow-xl transition-shadow duration-300"
+              className="bg-card rounded-2xl border border-border p-5 sm:p-6 md:p-8 hover:shadow-xl transition-shadow duration-300"
             >
               <div
                 className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold mb-4 ${
@@ -44,9 +44,9 @@ const ContactSection = () => {
               <p className="text-sm text-muted-foreground mb-6">{clinic.doctor}</p>
 
               <div className="space-y-4">
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <div className="flex items-start gap-3 text-sm text-muted-foreground">
                   <Phone className="w-4 h-4 text-foreground flex-shrink-0" />
-                  <span className="flex flex-wrap gap-x-3">
+                  <span className="min-w-0 flex flex-wrap gap-x-3 gap-y-1 break-words">
                     {clinic.phones.map((phone, phoneIndex) => (
                       <a
                         key={phone}
@@ -61,12 +61,12 @@ const ContactSection = () => {
                 </div>
                 <a
                   href={`mailto:${clinic.email}`}
-                  className="flex items-center gap-3 text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="flex items-start gap-3 text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   <Mail className="w-4 h-4 text-foreground" />
-                  <span>{clinic.email}</span>
+                  <span className="break-all">{clinic.email}</span>
                 </a>
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <div className="flex items-start gap-3 text-sm text-muted-foreground">
                   <Clock className="w-4 h-4 text-foreground" />
                   <span>{clinic.hours}</span>
                 </div>
@@ -108,7 +108,7 @@ const ContactSection = () => {
                 title={`${content.branding.siteName} Location`}
               />
             </div>
-            <div className="p-8 text-center">
+            <div className="p-5 sm:p-6 md:p-8 text-center">
               <MapPin className="w-8 h-8 text-primary mx-auto mb-4" />
               <h3 className="font-heading font-semibold text-foreground text-lg mb-2">{content.contact.locationTitle}</h3>
               <p className="text-muted-foreground mb-4">

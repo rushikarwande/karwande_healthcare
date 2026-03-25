@@ -23,7 +23,7 @@ const DoctorsSection = () => {
           <p className="text-muted-foreground max-w-2xl mx-auto">{content.doctors.description}</p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
           {content.doctors.items.map((doctor, idx) => (
             <motion.div
               key={doctor.id}
@@ -34,8 +34,8 @@ const DoctorsSection = () => {
               className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-xl transition-shadow duration-300"
             >
               <div className={`h-2 ${doctor.color === "primary" ? "bg-primary" : "bg-secondary"}`} />
-              <div className="p-8">
-                <div className="flex items-start gap-4 mb-6">
+              <div className="p-5 sm:p-6 md:p-8">
+                <div className="flex items-start gap-4 mb-6 min-w-0">
                   <div
                     className={`w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 ${
                       doctor.color === "primary" ? "bg-primary/10 text-primary" : "bg-secondary/10 text-secondary"
@@ -43,8 +43,8 @@ const DoctorsSection = () => {
                   >
                     <span className="font-heading font-bold text-xl">{doctor.initials}</span>
                   </div>
-                  <div>
-                    <h3 className="font-heading font-bold text-foreground text-lg leading-snug">{doctor.name}</h3>
+                  <div className="min-w-0">
+                    <h3 className="font-heading font-bold text-foreground text-lg leading-snug break-words">{doctor.name}</h3>
                     <p className={`text-sm font-medium ${doctor.color === "primary" ? "text-primary" : "text-secondary"}`}>
                       {doctor.title}
                     </p>

@@ -263,7 +263,7 @@ const AdminPage = () => {
     return (
       <AdminShell>
         <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-stretch">
-          <section className="rounded-[2rem] border border-border/60 bg-gradient-to-br from-foreground via-foreground/95 to-primary p-8 md:p-10 text-background shadow-2xl">
+          <section className="rounded-[2rem] border border-border/60 bg-gradient-to-br from-foreground via-foreground/95 to-primary p-6 md:p-10 text-background shadow-2xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-background/15 bg-background/10 px-4 py-2 text-sm font-medium mb-6">
               <ShieldCheck className="w-4 h-4" />
               Protected Admin Access
@@ -293,7 +293,7 @@ const AdminPage = () => {
             </div>
           </section>
 
-          <section className="rounded-[2rem] border border-border/70 bg-card/95 p-8 md:p-10 shadow-xl backdrop-blur">
+          <section className="rounded-[2rem] border border-border/70 bg-card/95 p-6 md:p-10 shadow-xl backdrop-blur">
             <div className="flex items-center gap-3 mb-8">
               <LogoMark />
               <div>
@@ -356,9 +356,9 @@ const AdminPage = () => {
                 <ArrowLeft className="w-4 h-4" />
                 Back to website
               </Link>
-              <div className="flex items-center gap-4">
+              <div className="flex min-w-0 items-center gap-4">
                 <LogoMark />
-                <div>
+                <div className="min-w-0">
                   <div className="text-sm font-medium text-primary">Content Control Center</div>
                   <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground">Website Admin Panel</h1>
                   <p className="text-muted-foreground mt-2 max-w-2xl">
@@ -369,13 +369,13 @@ const AdminPage = () => {
             </div>
 
             <div className="flex flex-col gap-3 lg:items-end">
-              <div className="flex items-center gap-3 rounded-2xl border border-border/70 bg-background/90 px-4 py-3 shadow-sm">
-                <span className="text-sm text-muted-foreground">{session.user.email}</span>
-                <Button variant="outline" onClick={handleLogout}>
+              <div className="flex w-full flex-col gap-3 rounded-2xl border border-border/70 bg-background/90 px-4 py-3 shadow-sm sm:w-auto sm:flex-row sm:items-center">
+                <span className="min-w-0 break-all text-sm text-muted-foreground">{session.user.email}</span>
+                <Button variant="outline" className="w-full sm:w-auto" onClick={handleLogout}>
                   Logout
                 </Button>
               </div>
-              <Button variant="outline" className="gap-2" onClick={() => void handleResetToDefault()}>
+              <Button variant="outline" className="w-full gap-2 sm:w-auto" onClick={() => void handleResetToDefault()}>
                 <RotateCcw className="w-4 h-4" />
                 Reset to Default
               </Button>
@@ -416,11 +416,11 @@ const AdminPage = () => {
               </Field>
             </div>
             <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-              <div className="flex items-center gap-4">
+              <div className="flex min-w-0 items-center gap-4">
                 <LogoMark />
                 <div className="text-sm text-muted-foreground">Current header logo preview</div>
               </div>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <label className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
                   <ImagePlus className="w-4 h-4" />
                   Upload Logo
@@ -437,7 +437,7 @@ const AdminPage = () => {
                   />
                 </label>
                 {draftContent.branding.logoImage && (
-                  <Button variant="outline" onClick={() => update((draft) => { draft.branding.logoImage = ""; })}>Remove Logo Image</Button>
+                  <Button variant="outline" className="w-full sm:w-auto" onClick={() => update((draft) => { draft.branding.logoImage = ""; })}>Remove Logo Image</Button>
                 )}
               </div>
             </div>
@@ -480,10 +480,10 @@ const AdminPage = () => {
             <Field label="Section Description" className="mt-6"><Textarea value={draftContent.services.description} onChange={(event) => update((draft) => { draft.services.description = event.target.value; })} /></Field>
             <div className="space-y-6 mt-6">
               {draftContent.services.categories.map((category, categoryIndex) => (
-                <div key={category.id} className="rounded-2xl border border-border bg-background p-5 space-y-5">
-                  <div className="flex items-center justify-between gap-4">
-                    <h3 className="font-heading text-lg font-semibold">Service Category {categoryIndex + 1}</h3>
-                    <Button variant="outline" onClick={() => update((draft) => { draft.services.categories.splice(categoryIndex, 1); })}>Remove Category</Button>
+                <div key={category.id} className="rounded-2xl border border-border bg-background p-4 md:p-5 space-y-5">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <h3 className="font-heading text-lg font-semibold break-words">Service Category {categoryIndex + 1}</h3>
+                    <Button variant="outline" className="w-full sm:w-auto" onClick={() => update((draft) => { draft.services.categories.splice(categoryIndex, 1); })}>Remove Category</Button>
                   </div>
                   <div className="grid md:grid-cols-3 gap-4">
                     <Field label="Category Name"><Input value={category.category} onChange={(event) => update((draft) => { draft.services.categories[categoryIndex].category = event.target.value; })} /></Field>
@@ -513,7 +513,7 @@ const AdminPage = () => {
                               <input type="file" accept="image/*" className="hidden" onChange={(event) => void handleImageUpload(event, (value) => update((draft) => { draft.services.categories[categoryIndex].items[itemIndex].image = value; }))} />
                             </label>
                           </div>
-                          <div className="grid md:grid-cols-2 gap-4">
+                          <div className="grid min-w-0 md:grid-cols-2 gap-4">
                             <Field label="Service Title"><Input value={item.title} onChange={(event) => update((draft) => { draft.services.categories[categoryIndex].items[itemIndex].title = event.target.value; })} /></Field>
                             <Field label="Icon">
                               <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value={item.icon} onChange={(event) => update((draft) => { draft.services.categories[categoryIndex].items[itemIndex].icon = event.target.value as IconKey; })}>
@@ -521,7 +521,7 @@ const AdminPage = () => {
                               </select>
                             </Field>
                             <div className="md:col-span-2"><Field label="Service Description"><Textarea value={item.description} onChange={(event) => update((draft) => { draft.services.categories[categoryIndex].items[itemIndex].description = event.target.value; })} /></Field></div>
-                            <div className="md:col-span-2 flex justify-end"><Button variant="outline" onClick={() => update((draft) => { draft.services.categories[categoryIndex].items.splice(itemIndex, 1); })}>Remove Service</Button></div>
+                            <div className="md:col-span-2 flex justify-stretch sm:justify-end"><Button variant="outline" className="w-full sm:w-auto" onClick={() => update((draft) => { draft.services.categories[categoryIndex].items.splice(itemIndex, 1); })}>Remove Service</Button></div>
                           </div>
                         </div>
                       </div>
@@ -544,7 +544,7 @@ const AdminPage = () => {
             <div className="mt-4 text-sm text-muted-foreground">Gallery order controls the website display order. The first 9 images are shown first on the live site.</div>
             <div className="space-y-4 mt-6">
               {draftContent.gallery.items.map((item, index) => (
-                <div key={item.id} className="rounded-2xl border border-border bg-background p-5">
+                <div key={item.id} className="rounded-2xl border border-border bg-background p-4 md:p-5">
                   <div className="grid lg:grid-cols-[160px_1fr] gap-5">
                     <div className="space-y-3">
                       <img src={item.image} alt={item.title} className="w-full h-36 rounded-xl object-cover border border-border" />
@@ -564,10 +564,10 @@ const AdminPage = () => {
                         </Field>
                       </div>
                       <Field label="Photo Description"><Textarea value={item.description} onChange={(event) => update((draft) => { draft.gallery.items[index].description = event.target.value; })} /></Field>
-                      <div className="flex flex-wrap gap-3">
-                        <Button variant="outline" className="gap-2" onClick={() => moveGalleryItem(index, -1)} disabled={index === 0}><ArrowUp className="w-4 h-4" />Move Up</Button>
-                        <Button variant="outline" className="gap-2" onClick={() => moveGalleryItem(index, 1)} disabled={index === draftContent.gallery.items.length - 1}><ArrowDown className="w-4 h-4" />Move Down</Button>
-                        <Button variant="outline" className="gap-2" onClick={() => update((draft) => { draft.gallery.items.splice(index, 1); })}><Trash2 className="w-4 h-4" />Delete</Button>
+                      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                        <Button variant="outline" className="w-full gap-2 sm:w-auto" onClick={() => moveGalleryItem(index, -1)} disabled={index === 0}><ArrowUp className="w-4 h-4" />Move Up</Button>
+                        <Button variant="outline" className="w-full gap-2 sm:w-auto" onClick={() => moveGalleryItem(index, 1)} disabled={index === draftContent.gallery.items.length - 1}><ArrowDown className="w-4 h-4" />Move Down</Button>
+                        <Button variant="outline" className="w-full gap-2 sm:w-auto" onClick={() => update((draft) => { draft.gallery.items.splice(index, 1); })}><Trash2 className="w-4 h-4" />Delete</Button>
                       </div>
                     </div>
                   </div>
@@ -587,10 +587,10 @@ const AdminPage = () => {
             <Field label="Section Description" className="mt-6"><Textarea value={draftContent.doctors.description} onChange={(event) => update((draft) => { draft.doctors.description = event.target.value; })} /></Field>
             <div className="space-y-6 mt-6">
               {draftContent.doctors.items.map((doctor, doctorIndex) => (
-                <div key={doctor.id} className="rounded-2xl border border-border bg-background p-5 space-y-4">
-                  <div className="flex items-center justify-between gap-4">
-                    <h3 className="font-heading text-lg font-semibold">{doctor.name}</h3>
-                    <Button variant="outline" onClick={() => update((draft) => { draft.doctors.items.splice(doctorIndex, 1); })}>Remove Doctor</Button>
+                <div key={doctor.id} className="rounded-2xl border border-border bg-background p-4 md:p-5 space-y-4">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <h3 className="font-heading text-lg font-semibold break-words">{doctor.name}</h3>
+                    <Button variant="outline" className="w-full sm:w-auto" onClick={() => update((draft) => { draft.doctors.items.splice(doctorIndex, 1); })}>Remove Doctor</Button>
                   </div>
                   <div className="grid md:grid-cols-2 gap-4">
                     <Field label="Name"><Input value={doctor.name} onChange={(event) => update((draft) => { draft.doctors.items[doctorIndex].name = event.target.value; })} /></Field>
@@ -638,7 +638,7 @@ const AdminPage = () => {
                       {iconOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                     </select>
                   </Field>
-                  <div className="flex items-end"><Button variant="outline" className="w-full" onClick={() => update((draft) => { draft.about.highlights.splice(highlightIndex, 1); })}>Remove Highlight</Button></div>
+                  <div className="flex items-stretch md:items-end"><Button variant="outline" className="w-full" onClick={() => update((draft) => { draft.about.highlights.splice(highlightIndex, 1); })}>Remove Highlight</Button></div>
                   <div className="md:col-span-3"><Field label="Description"><Textarea value={highlight.description} onChange={(event) => update((draft) => { draft.about.highlights[highlightIndex].description = event.target.value; })} /></Field></div>
                 </div>
               ))}
@@ -657,10 +657,10 @@ const AdminPage = () => {
             </div>
             <div className="space-y-6 mt-6">
               {draftContent.contact.clinics.map((clinic, clinicIndex) => (
-                <div key={clinic.id} className="rounded-2xl border border-border bg-background p-5 space-y-4">
-                  <div className="flex items-center justify-between gap-4">
-                    <h3 className="font-heading text-lg font-semibold">{clinic.name}</h3>
-                    <Button variant="outline" onClick={() => update((draft) => { draft.contact.clinics.splice(clinicIndex, 1); })}>Remove Clinic</Button>
+                <div key={clinic.id} className="rounded-2xl border border-border bg-background p-4 md:p-5 space-y-4">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <h3 className="font-heading text-lg font-semibold break-words">{clinic.name}</h3>
+                    <Button variant="outline" className="w-full sm:w-auto" onClick={() => update((draft) => { draft.contact.clinics.splice(clinicIndex, 1); })}>Remove Clinic</Button>
                   </div>
                   <div className="grid md:grid-cols-2 gap-4">
                     <Field label="Clinic Name"><Input value={clinic.name} onChange={(event) => update((draft) => { draft.contact.clinics[clinicIndex].name = event.target.value; })} /></Field>
@@ -707,10 +707,13 @@ const AdminPage = () => {
             </div>
           </AdminSection>
           <div className="sticky bottom-4 z-20 flex justify-center">
-            <div className="flex items-center gap-4 rounded-2xl border border-border bg-card/95 px-5 py-4 shadow-lg backdrop-blur">
-              {saveError && <span className="text-sm font-medium text-destructive">{saveError}</span>}
-              {saveMessage && <span className="text-sm font-medium text-primary">{saveMessage}</span>}
-              <Button className="gap-2" onClick={() => void handleSaveChanges()}>
+            <div className="flex w-full max-w-3xl flex-col gap-3 rounded-2xl border border-border bg-card/95 px-4 py-4 shadow-lg backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:px-5">
+              <div className="min-w-0 text-sm">
+                {saveError && <span className="font-medium break-words text-destructive">{saveError}</span>}
+                {!saveError && saveMessage && <span className="font-medium break-words text-primary">{saveMessage}</span>}
+                {!saveError && !saveMessage && <span className="break-words text-muted-foreground">Review your edits and save when you are ready.</span>}
+              </div>
+              <Button className="w-full gap-2 sm:w-auto" onClick={() => void handleSaveChanges()}>
                 Save Changes
               </Button>
             </div>
@@ -740,13 +743,13 @@ const AdminPage = () => {
 };
 
 const AdminShell = ({ children }: { children: ReactNode }) => (
-  <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(14,165,233,0.18),transparent_28%),radial-gradient(circle_at_top_right,rgba(16,185,129,0.12),transparent_30%),linear-gradient(180deg,#f7fbfd_0%,#edf4f7_100%)]">
-    <div className="container mx-auto px-4 py-8 md:py-10">{children}</div>
+  <div className="min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_top_left,rgba(14,165,233,0.18),transparent_28%),radial-gradient(circle_at_top_right,rgba(16,185,129,0.12),transparent_30%),linear-gradient(180deg,#f7fbfd_0%,#edf4f7_100%)]">
+    <div className="container mx-auto px-3 py-6 sm:px-4 md:py-10">{children}</div>
   </div>
 );
 
 const AdminSection = ({ title, description, children }: { title: string; description: string; children: ReactNode }) => (
-  <section className="rounded-[1.75rem] border border-border/70 bg-card/90 p-6 md:p-8 shadow-sm backdrop-blur">
+  <section className="rounded-[1.75rem] border border-border/70 bg-card/90 p-4 sm:p-6 md:p-8 shadow-sm backdrop-blur">
     <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
       <div>
         <h2 className="font-heading text-2xl font-bold text-foreground">{title}</h2>
@@ -803,14 +806,14 @@ const CropImageDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={(nextOpen) => !nextOpen && onClose()}>
-      <DialogContent className="max-w-3xl rounded-[1.75rem] p-0 overflow-hidden">
-        <DialogHeader className="px-6 pt-6">
+      <DialogContent className="w-[calc(100vw-1.5rem)] max-w-3xl rounded-[1.5rem] p-0 overflow-hidden">
+        <DialogHeader className="px-4 pt-4 sm:px-6 sm:pt-6">
           <DialogTitle>Adjust Image Crop</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
 
-        <div className="px-6 pb-6">
-          <div className="relative h-[420px] rounded-2xl overflow-hidden bg-foreground">
+        <div className="px-4 pb-4 sm:px-6 sm:pb-6">
+          <div className="relative h-[280px] rounded-2xl overflow-hidden bg-foreground sm:h-[420px]">
             {imageUrl && (
               <Cropper
                 image={imageUrl}
@@ -837,16 +840,16 @@ const CropImageDialog = ({
           </div>
 
           <div className="mt-6 space-y-3">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="text-sm text-muted-foreground">
                 Drag the image inside the box, then zoom in or zoom out until it fits exactly the way you want.
               </div>
-              <Button type="button" variant="outline" onClick={onReset}>
+              <Button type="button" variant="outline" className="w-full sm:w-auto" onClick={onReset}>
                 Reset
               </Button>
             </div>
-            <div className="flex items-center gap-4">
-              <Button type="button" size="icon" variant="outline" onClick={onZoomOut} disabled={zoom <= MIN_CROP_ZOOM}>
+            <div className="flex items-center gap-3 sm:gap-4">
+              <Button type="button" size="icon" variant="outline" className="shrink-0" onClick={onZoomOut} disabled={zoom <= MIN_CROP_ZOOM}>
                 <Minus className="h-4 w-4" />
               </Button>
               <div className="flex-1 space-y-2">
@@ -862,17 +865,17 @@ const CropImageDialog = ({
                   onValueChange={(value) => onZoomChange(value[0] ?? 1)}
                 />
               </div>
-              <Button type="button" size="icon" variant="outline" onClick={onZoomIn} disabled={zoom >= MAX_CROP_ZOOM}>
+              <Button type="button" size="icon" variant="outline" className="shrink-0" onClick={onZoomIn} disabled={zoom >= MAX_CROP_ZOOM}>
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
           </div>
         </div>
-        <DialogFooter className="border-t border-border bg-muted/30 px-6 py-4">
-          <Button variant="outline" onClick={onClose}>
+        <DialogFooter className="border-t border-border bg-muted/30 px-4 py-4 sm:px-6">
+          <Button variant="outline" className="w-full sm:w-auto" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={onConfirm} disabled={submitting}>
+          <Button className="w-full sm:w-auto" onClick={onConfirm} disabled={submitting}>
             {submitting ? "Saving..." : "Use This Crop"}
           </Button>
         </DialogFooter>

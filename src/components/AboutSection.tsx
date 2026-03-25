@@ -8,7 +8,7 @@ const AboutSection = () => {
   return (
     <section id="about" className="py-20 md:py-28 bg-background">
       <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 md:gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -32,7 +32,7 @@ const AboutSection = () => {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="grid grid-cols-2 gap-4"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4"
           >
             {content.about.highlights.map((item, idx) => {
               const Icon = iconMap[item.icon];
