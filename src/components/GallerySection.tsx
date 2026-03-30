@@ -70,7 +70,7 @@ const GallerySection = () => {
           })}
         </motion.div>
 
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="columns-1 gap-6 md:columns-2 xl:columns-3">
           {visibleImages.map((item, idx) => (
             <motion.article
               key={item.id}
@@ -78,26 +78,25 @@ const GallerySection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.06 }}
-              className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm group"
+              className="group mb-6 break-inside-avoid overflow-hidden rounded-3xl border border-border bg-card shadow-sm"
             >
-              <div className="relative overflow-hidden h-[320px]">
+              <div className="relative overflow-hidden bg-accent/30 p-3 pb-0">
                 <SafeImage
                   src={item.image}
                   fallbackSrc={clinicHero}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="h-auto max-h-[900px] w-full rounded-[20px] object-contain transition-transform duration-700 group-hover:scale-[1.02]"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/25 to-transparent" />
-                <div className="absolute top-4 left-4">
-                  <span className="inline-flex rounded-full bg-background/90 px-3 py-1 text-xs font-semibold text-foreground">
+              </div>
+              <div className="space-y-3 p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="font-heading text-xl font-semibold text-foreground">{item.title}</h3>
+                  <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
                     {item.category}
                   </span>
                 </div>
-                <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <h3 className="font-heading text-xl font-semibold text-background mb-2">{item.title}</h3>
-                  <p className="text-sm leading-relaxed text-background/75">{item.description}</p>
-                </div>
+                <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
               </div>
             </motion.article>
           ))}

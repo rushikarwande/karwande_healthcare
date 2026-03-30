@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type ChangeEvent, type ReactNode } from "react";
 import Cropper, { type Area } from "react-easy-crop";
-import { ArrowDown, ArrowLeft, ArrowUp, FileText, ImagePlus, LayoutGrid, MapPinned, Minus, Plus, RotateCcw, ShieldCheck, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowUp, FileText, ImagePlus, LayoutGrid, Loader2, MapPinned, Minus, Plus, RotateCcw, ShieldCheck, Trash2 } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,13 @@ interface CropDialogState {
   description: string;
 }
 
+interface ImageUploadOptions {
+  aspect?: number;
+  description?: string;
+  skipCrop?: boolean;
+  uploadKey?: string;
+}
+
 const AdminPage = () => {
   const { content, loading, saveContent } = useSiteContent();
   const [draftContent, setDraftContent] = useState<SiteContent>(() => cloneContent(content));
@@ -47,6 +54,7 @@ const AdminPage = () => {
   const [cropZoom, setCropZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [cropSubmitting, setCropSubmitting] = useState(false);
+  const [activeUploadKey, setActiveUploadKey] = useState<string | null>(null);
 
   useEffect(() => {
     setDraftContent(cloneContent(content));
@@ -93,7 +101,7 @@ const AdminPage = () => {
   const handleImageUpload = async (
     event: ChangeEvent<HTMLInputElement>,
     apply: (value: string) => void,
-    options?: { aspect?: number; description?: string },
+    options?: ImageUploadOptions,
   ) => {
     const file = event.target.files?.[0];
     if (!file) {
@@ -101,6 +109,17 @@ const AdminPage = () => {
     }
 
     try {
+      if (options?.uploadKey && options.skipCrop) {
+        setActiveUploadKey(options.uploadKey);
+      }
+
+      if (options?.skipCrop) {
+        const result = await uploadSiteImage(file, "content");
+        apply(result);
+        setSaveError("");
+        return;
+      }
+
       const imageUrl = URL.createObjectURL(file);
       setCropDialog({
         imageUrl,
@@ -115,6 +134,9 @@ const AdminPage = () => {
     } catch (error) {
       setSaveError(error instanceof Error ? error.message : "Unable to upload image.");
     } finally {
+      if (options?.uploadKey && options.skipCrop) {
+        setActiveUploadKey((current) => current === options.uploadKey ? null : current);
+      }
       event.target.value = "";
     }
   };
@@ -156,10 +178,12 @@ const AdminPage = () => {
       const result = await uploadSiteImage(croppedFile, "content");
       cropDialog.apply(result);
       setSaveError("");
+      setActiveUploadKey(null);
       closeCropDialog();
     } catch (error) {
       setSaveError(error instanceof Error ? error.message : "Unable to crop image.");
       setCropSubmitting(false);
+      setActiveUploadKey(null);
     }
   };
 
@@ -347,7 +371,7 @@ const AdminPage = () => {
 
   return (
     <AdminShell>
-      <div className="rounded-[2rem] border border-border/70 bg-card/90 shadow-xl backdrop-blur overflow-hidden">
+      <div className="rounded-[2rem] border border-border/70 bg-card/90 shadow-xl backdrop-blur">
         <div className="relative overflow-hidden border-b border-border/70 bg-gradient-to-r from-primary/10 via-background to-secondary/10 px-6 py-8 md:px-8">
           <div className="absolute inset-y-0 right-0 w-1/3 bg-[radial-gradient(circle_at_top_right,rgba(14,165,233,0.18),transparent_58%)]" />
           <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -383,7 +407,7 @@ const AdminPage = () => {
           </div>
         </div>
 
-        <div className="p-6 md:p-8">
+        <div className="p-6 pb-32 md:p-8 md:pb-36">
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 mb-8">
             {adminStats.map((item) => {
               const Icon = item.icon;
@@ -541,18 +565,31 @@ const AdminPage = () => {
               <Field label="Section Title"><Input value={draftContent.gallery.title} onChange={(event) => update((draft) => { draft.gallery.title = event.target.value; })} /></Field>
             </div>
             <Field label="Section Description" className="mt-6"><Textarea value={draftContent.gallery.description} onChange={(event) => update((draft) => { draft.gallery.description = event.target.value; })} /></Field>
-            <div className="mt-4 text-sm text-muted-foreground">Gallery order controls the website display order. The first 9 images are shown first on the live site.</div>
+            <div className="mt-4 text-sm text-muted-foreground">Gallery order controls the website display order. The first 9 images are shown first on the live site. Clients can upload gallery photos in any image size.</div>
             <div className="space-y-4 mt-6">
               {draftContent.gallery.items.map((item, index) => (
                 <div key={item.id} className="rounded-2xl border border-border bg-background p-4 md:p-5">
                   <div className="grid lg:grid-cols-[160px_1fr] gap-5">
                     <div className="space-y-3">
-                      <img src={item.image} alt={item.title} className="w-full h-36 rounded-xl object-cover border border-border" />
-                      <label className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:bg-accent">
-                        <ImagePlus className="w-4 h-4" />
-                        Upload Photo
-                        <input type="file" accept="image/*" className="hidden" onChange={(event) => void handleImageUpload(event, (value) => update((draft) => { draft.gallery.items[index].image = value; }))} />
-                      </label>
+                      <img src={item.image} alt={item.title} className="h-auto max-h-56 w-full rounded-xl border border-border bg-accent/30 object-contain p-2" />
+                      <UploadLabel
+                        idleLabel="Upload Photo"
+                        uploading={activeUploadKey === `gallery-${item.id}`}
+                        className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-border px-3 py-2 text-sm hover:bg-accent"
+                      >
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          disabled={activeUploadKey === `gallery-${item.id}`}
+                          onChange={(event) =>
+                            void handleImageUpload(event, (value) => update((draft) => { draft.gallery.items[index].image = value; }), {
+                              skipCrop: true,
+                              uploadKey: `gallery-${item.id}`,
+                            })
+                          }
+                        />
+                      </UploadLabel>
                     </div>
                     <div className="space-y-4">
                       <div className="grid md:grid-cols-2 gap-4">
@@ -706,20 +743,38 @@ const AdminPage = () => {
               <Field label="LinkedIn URL"><Input value={draftContent.footer.socialLinks.linkedin} onChange={(event) => update((draft) => { draft.footer.socialLinks.linkedin = event.target.value; })} placeholder="https://linkedin.com/company/your-page" /></Field>
             </div>
           </AdminSection>
-          <div className="sticky bottom-4 z-20 flex justify-center">
-            <div className="flex w-full max-w-3xl flex-col gap-3 rounded-2xl border border-border bg-card/95 px-4 py-4 shadow-lg backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:px-5">
-              <div className="min-w-0 text-sm">
-                {saveError && <span className="font-medium break-words text-destructive">{saveError}</span>}
-                {!saveError && saveMessage && <span className="font-medium break-words text-primary">{saveMessage}</span>}
-                {!saveError && !saveMessage && <span className="break-words text-muted-foreground">Review your edits and save when you are ready.</span>}
-              </div>
-              <Button className="w-full gap-2 sm:w-auto" onClick={() => void handleSaveChanges()}>
-                Save Changes
-              </Button>
-            </div>
-          </div>
         </div>
       </div>
+      </div>
+      <div className="fixed inset-x-3 bottom-4 z-30 mx-auto w-auto max-w-4xl rounded-[28px] border border-primary/15 bg-card/95 p-4 shadow-[0_24px_60px_-32px_rgba(26,61,44,0.45)] backdrop-blur md:inset-x-4 md:p-5">
+        {saveError ? (
+          <div className="mb-4 rounded-[20px] border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm font-medium text-destructive">
+            {saveError}
+          </div>
+        ) : null}
+
+        {saveMessage ? (
+          <div className="mb-4 rounded-[20px] border border-primary/20 bg-primary/8 px-4 py-3 text-sm font-medium text-primary">
+            {saveMessage}
+          </div>
+        ) : null}
+
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <p className="min-w-0 break-words text-sm text-muted-foreground">
+            Review all changes, then save to update the live website.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              to="/"
+              className="rounded-full border border-border px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:bg-primary hover:text-primary-foreground"
+            >
+              Back to Site
+            </Link>
+            <Button className="w-full gap-2 sm:w-auto" onClick={() => void handleSaveChanges()}>
+              Save Changes
+            </Button>
+          </div>
+        </div>
       </div>
       <CropImageDialog
         open={Boolean(cropDialog)}
@@ -766,6 +821,24 @@ const Field = ({ label, children, className = "" }: { label: string; children: R
     <Label className="mb-2 block text-foreground/85">{label}</Label>
     {children}
   </div>
+);
+
+const UploadLabel = ({
+  idleLabel,
+  uploading,
+  className,
+  children,
+}: {
+  idleLabel: string;
+  uploading: boolean;
+  className: string;
+  children: ReactNode;
+}) => (
+  <label className={`${className} ${uploading ? "cursor-wait opacity-75" : "cursor-pointer"}`} aria-busy={uploading}>
+    {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}
+    {uploading ? "Uploading..." : idleLabel}
+    {children}
+  </label>
 );
 
 const CropImageDialog = ({
