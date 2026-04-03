@@ -63,6 +63,7 @@ export interface ClinicContact {
   subtitle: string;
   doctor: string;
   phones: string[];
+  appointmentNumber?: string;
   email: string;
   hours: string;
   color: ColorKey;
@@ -307,8 +308,8 @@ export const defaultSiteContent: SiteContent = {
     callNumber: "9405 568 568",
     appointmentNumber: "9405 568 568",
     clinics: [
-      { id: "clinic-1", name: "Dr. Karwande Diagnostic", subtitle: "Advanced Sonography Clinic", doctor: "Dr. Amol Karwande", phones: ["02429-222020", "9405 568 568"], email: "DrkarwandeDiagnostic@gmail.com", hours: "Monday - Sunday, 9 AM - 9 PM", color: "primary" },
-      { id: "clinic-2", name: "Dr. R.K.'s Ekdant Dental Care", subtitle: "Multispeciality Dental Clinic", doctor: "Dr. Rutuja Karwande (Kale)", phones: ["8999 48 2897"], email: "rpk224455@gmail.com", hours: "Contact for appointment", color: "secondary" },
+      { id: "clinic-1", name: "Dr. Karwande Diagnostic", subtitle: "Advanced Sonography Clinic", doctor: "Dr. Amol Karwande", phones: ["02429-222020", "9405 568 568"], appointmentNumber: "9405 568 568", email: "DrkarwandeDiagnostic@gmail.com", hours: "Monday - Sunday, 9 AM - 9 PM", color: "primary" },
+      { id: "clinic-2", name: "Dr. R.K.'s Ekdant Dental Care", subtitle: "Multispeciality Dental Clinic", doctor: "Dr. Rutuja Karwande (Kale)", phones: ["8999482897"], appointmentNumber: "8999482897", email: "rpk224455@gmail.com", hours: "Contact for appointment", color: "secondary" },
     ],
     mapEmbedUrl: NEW_MAP_EMBED_URL,
     mapLink: "https://maps.app.goo.gl/ZKgcXMvWgj4wLRtDA",
@@ -356,6 +357,14 @@ function normalizeContent(value: SiteContent) {
     value.contact.clinics?.[0]?.phones?.[0] ||
     value.footer.phones?.[0] ||
     defaultSiteContent.contact.appointmentNumber;
+
+  value.contact.clinics = (value.contact.clinics || []).map((clinic, clinicIndex) => ({
+    ...clinic,
+    appointmentNumber:
+      clinic.appointmentNumber?.trim() ||
+      clinic.phones?.[0] ||
+      (clinicIndex === 1 ? "8999482897" : value.contact.appointmentNumber),
+  }));
 
   value.branding.logoImage = normalizeImageUrl(value.branding.logoImage, "");
   value.hero.backgroundImage = normalizeImageUrl(value.hero.backgroundImage, defaultSiteContent.hero.backgroundImage);
@@ -549,6 +558,7 @@ function normalizeImageUrl(value: string | undefined, fallback: string) {
 
   return url;
 }
+
 
 
 

@@ -23,8 +23,11 @@ const ContactSection = () => {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto mb-12">
-          {content.contact.clinics.map((clinic, idx) => (
-            <motion.div
+          {content.contact.clinics.map((clinic, idx) => {
+            const clinicAppointmentNumber = clinic.appointmentNumber || content.contact.appointmentNumber;
+
+            return (
+              <motion.div
               key={clinic.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -80,13 +83,14 @@ const ContactSection = () => {
                     : "bg-secondary text-secondary-foreground hover:bg-secondary/90"
                 }`}
               >
-                <a href={`tel:${getDialNumber(content.contact.appointmentNumber)}`}>
+                <a href={`tel:${getDialNumber(clinicAppointmentNumber)}`}>
                   <Phone className="w-4 h-4" />
                   Call for Appointment
                 </a>
               </Button>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
 
         <motion.div
@@ -134,4 +138,5 @@ const ContactSection = () => {
 };
 
 export default ContactSection;
+
 

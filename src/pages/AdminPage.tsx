@@ -705,6 +705,7 @@ const AdminPage = () => {
                     <Field label="Doctor"><Input value={clinic.doctor} onChange={(event) => update((draft) => { draft.contact.clinics[clinicIndex].doctor = event.target.value; })} /></Field>
                     <Field label="Email"><Input value={clinic.email} onChange={(event) => update((draft) => { draft.contact.clinics[clinicIndex].email = event.target.value; })} /></Field>
                     <Field label="Phones (comma separated)"><Input value={clinic.phones.join(", ")} onChange={(event) => update((draft) => { draft.contact.clinics[clinicIndex].phones = event.target.value.split(",").map((item) => item.trim()).filter(Boolean); })} /></Field>
+                    <Field label="Appointment Number"><Input value={clinic.appointmentNumber ?? ""} onChange={(event) => update((draft) => { draft.contact.clinics[clinicIndex].appointmentNumber = event.target.value; })} placeholder="8999482897" /></Field>
                     <Field label="Hours"><Input value={clinic.hours} onChange={(event) => update((draft) => { draft.contact.clinics[clinicIndex].hours = event.target.value; })} /></Field>
                     <Field label="Color">
                       <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value={clinic.color} onChange={(event) => update((draft) => { draft.contact.clinics[clinicIndex].color = event.target.value as ColorKey; })}>
@@ -716,7 +717,7 @@ const AdminPage = () => {
               ))}
             </div>
             <Button className="mt-4 gap-2" onClick={() => update((draft) => {
-              draft.contact.clinics.push({ id: createId("clinic"), name: "New Clinic", subtitle: "Clinic Subtitle", doctor: "Doctor Name", phones: ["0000 000 000"], email: "clinic@example.com", hours: "Working hours", color: "primary" });
+              draft.contact.clinics.push({ id: createId("clinic"), name: "New Clinic", subtitle: "Clinic Subtitle", doctor: "Doctor Name", phones: ["0000 000 000"], appointmentNumber: "0000000000", email: "clinic@example.com", hours: "Working hours", color: "primary" });
             })}><Plus className="w-4 h-4" />Add Clinic Card</Button>
             <div className="grid md:grid-cols-2 gap-6 mt-6">
               <Field label="Map Embed URL"><Textarea value={draftContent.contact.mapEmbedUrl} onChange={(event) => update((draft) => { draft.contact.mapEmbedUrl = event.target.value; })} /></Field>
@@ -1002,6 +1003,8 @@ function loadImage(src: string) {
 }
 
 export default AdminPage;
+
+
 
 
 
